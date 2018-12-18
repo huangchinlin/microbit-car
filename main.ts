@@ -99,7 +99,7 @@ namespace DadsToolBox {
     }
 
     //% blockId=letCarMove block="let car %dir with speed %speed"
-    //% speed.min=0 speed.max=4096
+    //% speed.min=0 speed.max=255
     export function letCarMove(dir: CarDir = CarDir.MOVE_FORWARD, speed: number = 0): void {
         switch (dir) {
             case CarDir.MOVE_FORWARD:
