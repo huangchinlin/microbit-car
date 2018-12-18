@@ -6,7 +6,7 @@
 //% color="#33AA22" weight=20
 namespace DadsToolBox {
     const PAC9685_BASE_ADDR = 0x41;
-    const MODE_1_SUB_ADDR = 0x4;
+    const MODE_1_SUB_ADDR = 0x00;
     const PRESCARE_SUB_ADDR = 0xfe;
     const LED_0_SUB_ADDR = 0x06;
     const LED_SUB_ADDR_OFFSET = 4;
