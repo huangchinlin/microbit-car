@@ -1,6 +1,6 @@
 {
     "name": "microbit-car",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "",
     "dependencies": {
         "core": "*",
@@ -12,9 +12,7 @@
         "_locales/zh/microbit-car-jsdoc-strings.json",
         "_locales/zh/microbit-car-strings.json"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
+    "testFiles": ["test.ts"],
     "public": false,
     "installedVersion": "workspace:64d28bad-7e53-4492-6f24-305380a111ae"
 }
