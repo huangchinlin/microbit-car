@@ -3,7 +3,7 @@
 */
 
 //% blockId=main block="Dad's ToolBox"
-//% color="#aa7b0d" weight=20 icon="\uf5b6"
+//% color="#aa7b0d" weight=20 icon="\uf1b9"
 namespace DadsToolBox {
     const PCA9685_RESTART_DELAY = 500;
     const PCA9685_BASE_ADDR = 0x41;
