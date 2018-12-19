@@ -2,9 +2,9 @@
     "DadsToolBox.letCarMove|block": "讓小車以 速度$speed %dir",
     "{id:category}DadsToolBox": "阿爸的工具箱",
     "DadsToolBox|block": "阿爸的工具箱",
-    "DadsToolBox.CarDir.forward|block": "前進",
-    "DadsToolBox.CarDir.left|block": "左轉",
-    "DadsToolBox.CarDir.right|block": "右轉",
-    "DadsToolBox.CarDir.backward|block": "倒車",
-    "DadsToolBox.CarDir.stop|block": "停止"
+    "DadsToolBox.CarDir.MOVE_FORWARD|block": "前進",
+    "DadsToolBox.CarDir.TURN_LEFT|block": "左轉",
+    "DadsToolBox.CarDir.TURN_RIGHT|block": "右轉",
+    "DadsToolBox.CarDir.MOVE_BACKWARD|block": "倒車",
+    "DadsToolBox.CarDir.STOP|block": "停止"
 }

@@ -103,11 +103,11 @@ namespace DadsToolBox {
     }
 
     export enum CarDir {
-        //% blockId="forward block="MOVE FORWARD""
+        //% blockId="forward" block="MOVE FORWARD"
         MOVE_FORWARD = 0,
         //% blockId="left" block="TURN LEFT"
         TURN_LEFT,
-        //% blockId="right block="TURN RIGHT"
+        //% blockId="right" block="TURN RIGHT"
         TURN_RIGHT,
         //% blockId="backward" block="MOVE BACKWARD"
         MOVE_BACKWARD,

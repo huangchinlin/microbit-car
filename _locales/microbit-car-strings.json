@@ -1,7 +1,9 @@
 {
   "DadsToolBox.CarDir.MOVE_BACKWARD|block": "MOVE BACKWARD",
+  "DadsToolBox.CarDir.MOVE_FORWARD|block": "MOVE FORWARD",
   "DadsToolBox.CarDir.STOP|block": "STOP",
   "DadsToolBox.CarDir.TURN_LEFT|block": "TURN LEFT",
+  "DadsToolBox.CarDir.TURN_RIGHT|block": "TURN RIGHT",
   "DadsToolBox.letCarMove|block": "let car %dir with speed %speed",
   "{id:category}DadsToolBox": "DadsToolBox"
 }
