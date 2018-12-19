@@ -14,6 +14,7 @@
     "DadsToolBox.LampColor.RED|block": "亮紅色",
     "DadsToolBox.LampColor.WHITE|block": "亮白色",
     "DadsToolBox.LampColor.YELLOW|block": "亮黃色",
+    "DadsToolBox.LampColor.BLUE|block": "亮藍色",
     "DadsToolBox.letLampOnByColor|block": "讓小車車的大燈 %color",
-    "DadsToolBox.letLampOnByRGB|block": "打開小車車的大燈 紅 %r|綠 %g|藍 %b"
+    "DadsToolBox.letLampOnByRGB|block": "打開小車車的大燈, 依照 紅 %r|綠 %g|藍 %b 調色"
 }
