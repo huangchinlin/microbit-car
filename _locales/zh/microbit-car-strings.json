@@ -1,4 +1,10 @@
 {
-    "DadsToolBox.letCarMove|block": "讓小車以速度$speed %dir",
-    "{id:category}DadsToolBox": "阿爸的工具箱"
+    "DadsToolBox.letCarMove|block": "讓小車以 速度$speed %dir",
+    "{id:category}DadsToolBox": "阿爸的工具箱",
+    "DadsToolBox|block": "阿爸的工具箱",
+    "DadsToolBox.MOVE_FORWARD|block": "前進",
+    "DadsToolBox.TURN_LEFT|block": "左轉",
+    "DadsToolBox.TURN_RIGHT|block": "右轉",
+    "DadsToolBox.MOVE_BACKWARD|block": "倒車",
+    "DadsToolBox.STOP|block": "停止"
 }

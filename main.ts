@@ -1,6 +1,6 @@
 /*
  * the module for micro.bit car
-*/
+ */
 
 //% blockId=main block="Dad's ToolBox"
 //% color="#aa7b0d" weight=20 icon="\uf1b9"
@@ -27,7 +27,11 @@ namespace DadsToolBox {
     function setPwmUpdateRate(rate: number): void {
         let prescare = OSC_FREQENCE / PWM_MAX_STEP / rate - 1;
 
-        pins.i2cWriteNumber(PCA9685_BASE_ADDR, MODE_1_SUB_ADDR, NumberFormat.Int8BE)
+        pins.i2cWriteNumber(
+            PCA9685_BASE_ADDR,
+            MODE_1_SUB_ADDR,
+            NumberFormat.Int8BE
+        );
         let older = pins.i2cReadNumber(PCA9685_BASE_ADDR, NumberFormat.UInt8BE);
         let newer = (older & 0x7f) | 0x10;
 
@@ -67,72 +71,81 @@ namespace DadsToolBox {
         switch (motor) {
             case 'r':
             case 'R':
-                fChannel = dir == 'f' || dir == 'F' ? RIGHT_MOTOR_B_CHANNEL : RIGHT_MOTOR_A_CHANNEL;
+                fChannel =
+                    dir == 'f' || dir == 'F'
+                        ? RIGHT_MOTOR_B_CHANNEL
+                        : RIGHT_MOTOR_A_CHANNEL;
                 break;
             default:
-                fChannel = dir == 'f' || dir == 'F' ? LEFT_MOTOR_A_CHANNEL : LEFT_MOTOR_B_CHANEEL;
+                fChannel =
+                    dir == 'f' || dir == 'F'
+                        ? LEFT_MOTOR_A_CHANNEL
+                        : LEFT_MOTOR_B_CHANEEL;
                 break;
         }
 
         let fSpeed: number;
         speed *= MULTIPLE_OF_SPEED;
-        if (speed == 0)
-            fSpeed = 0;
-        else if (speed >= PWM_MAX_STEP)
-            fSpeed = PWM_MAX_STEP - 1;
-        else if (speed <= PWM_MIN_STEP)
-            fSpeed = PWM_MIN_STEP;
-        else
-            fSpeed = speed;
+        if (speed == 0) fSpeed = 0;
+        else if (speed >= PWM_MAX_STEP) fSpeed = PWM_MAX_STEP - 1;
+        else if (speed <= PWM_MIN_STEP) fSpeed = PWM_MIN_STEP;
+        else fSpeed = speed;
 
         let buffs = pins.createBuffer(5);
-        buffs[0] = LED_0_SUB_ADDR + (fChannel * LED_SUB_ADDR_OFFSET);
+        buffs[0] = LED_0_SUB_ADDR + fChannel * LED_SUB_ADDR_OFFSET;
         buffs[1] = 0;
         buffs[2] = 0;
         buffs[3] = fSpeed & 0xff;
         buffs[4] = (fSpeed >> 8) & 0xff;
 
-        if (!_initialized)
-            initPAC9685();
+        if (!_initialized) initPAC9685();
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
     export enum CarDir {
+        //% blockId="MOVE_FORWARD block="MOVE FORWARD""
         MOVE_FORWARD = 0,
+        //% blockId="TURN_LEFT" block="TURN LEFT"
         TURN_LEFT,
+        //% blockId="TURN_RIGHT block="TURN RIGHT"
         TURN_RIGHT,
+        //% blockId="MOVE_BACKWARD" block="MOVE BACKWARD"
         MOVE_BACKWARD,
+        //% blockId="STOP" block="STOP"
         STOP
     }
 
     //% blockId=letCarMove block="let car %dir with speed %speed"
     //% speed.min=0 speed.max=255
-    export function letCarMove(dir: CarDir = CarDir.MOVE_FORWARD, speed: number = 0): void {
+    export function letCarMove(
+        dir: CarDir = CarDir.MOVE_FORWARD,
+        speed: number = 0
+    ): void {
         letCarMove(CarDir.STOP, 0);
         control.waitMicros(MOTOR_DELAY_TIME);
 
         switch (dir) {
             case CarDir.MOVE_FORWARD:
-                doMotorRun("l", "f", speed);
-                doMotorRun("r", "f", speed);
+                doMotorRun('l', 'f', speed);
+                doMotorRun('r', 'f', speed);
                 break;
             case CarDir.TURN_LEFT:
-                doMotorRun("l", "b", speed);
-                doMotorRun("r", "f", speed);
+                doMotorRun('l', 'b', speed);
+                doMotorRun('r', 'f', speed);
                 break;
             case CarDir.TURN_RIGHT:
-                doMotorRun("l", "f", speed);
-                doMotorRun("r", "b", speed);
+                doMotorRun('l', 'f', speed);
+                doMotorRun('r', 'b', speed);
                 break;
             case CarDir.MOVE_BACKWARD:
-                doMotorRun("l", "b", speed);
-                doMotorRun("r", "b", speed);
+                doMotorRun('l', 'b', speed);
+                doMotorRun('r', 'b', speed);
                 break;
             default:
-                doMotorRun("l", "f", 0);
-                doMotorRun("l", "b", 0);
-                doMotorRun("r", "f", 0);
-                doMotorRun("r", "b", 0);
+                doMotorRun('l', 'f', 0);
+                doMotorRun('l', 'b', 0);
+                doMotorRun('r', 'f', 0);
+                doMotorRun('r', 'b', 0);
                 break;
         }
     }
