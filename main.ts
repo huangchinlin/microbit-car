@@ -57,7 +57,7 @@ namespace DadsToolBox {
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
-    function initPAC9685(): void {
+    function initPCA9685(): void {
         let buffs = pins.createBuffer(2);
         buffs[0] = MODE_1_SUB_ADDR;
         buffs[1] = 0x0;
@@ -98,7 +98,7 @@ namespace DadsToolBox {
         buffs[3] = fSpeed & 0xff;
         buffs[4] = (fSpeed >> 8) & 0xff;
 
-        if (!_initialized) initPAC9685();
+        if (!_initialized) initPCA9685();
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
