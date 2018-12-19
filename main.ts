@@ -5,7 +5,7 @@
 //% blockId=main block="Dad's ToolBox"
 //% color="#aa7b0d" weight=20 icon="\uf1b9"
 namespace DadsToolBox {
-    const PCA9685_RESTART_DELAY = 500;
+    const PCA9685_RESTART_DELAY = 500; // us
     const PCA9685_BASE_ADDR = 0x41;
     const MODE_1_SUB_ADDR = 0x00;
     const PRESCARE_SUB_ADDR = 0xfe;
@@ -15,11 +15,11 @@ namespace DadsToolBox {
     const LEFT_MOTOR_B_CHANEEL = 13;
     const RIGHT_MOTOR_A_CHANNEL = 14;
     const RIGHT_MOTOR_B_CHANNEL = 15;
-    const OSC_FREQENCE = 25000000;
+    const OSC_FREQENCE = 25000000; // Hz
     const PWM_MIN_STEP = 350;
     const PWM_MAX_STEP = 4096;
-    const PWM_UPDATE_RATE = 500;
-    const MOTOR_DELAY_TIME = 5000;
+    const PWM_UPDATE_RATE = 500; // Hz
+    const MOTOR_DELAY_TIME = 5000; // us
     const MULTIPLE_OF_SPEED = 16;
 
     let _initialized = false;
@@ -47,7 +47,7 @@ namespace DadsToolBox {
         control.waitMicros(5000);
         */
 
-        control.waitMicros(PCA9685_RESTART_DELAY * 2);
+        control.waitMicros(PCA9685_RESTART_DELAY);
         buffs[0] = MODE_1_SUB_ADDR;
         buffs[1] = older | 0xa1;
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
