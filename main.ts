@@ -2,7 +2,7 @@
  * the module for micro.bit car
  */
 
-//% blockId=DadsToolBox block="Dad's ToolBox"
+//% blockId="DadsToolBox" block="Dad's ToolBox"
 //% color="#aa7b0d" weight=20 icon="\uf1b9"
 namespace DadsToolBox {
     const PCA9685_RESTART_DELAY = 500; // us
@@ -115,7 +115,7 @@ namespace DadsToolBox {
         STOP
     }
 
-    //% blockId=letCarMove block="let car %dir with speed %speed"
+    //% blockId=letCarMove block="let car %dir|with speed %speed"
     //% speed.min=0 speed.max=255
     export function letCarMove(
         dir: CarDir = CarDir.MOVE_FORWARD,

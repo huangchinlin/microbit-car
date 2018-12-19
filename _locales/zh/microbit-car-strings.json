@@ -1,5 +1,5 @@
 {
-    "DadsToolBox.letCarMove|block": "讓小車車以速度 $speed 做 %dir",
+    "DadsToolBox.letCarMove|block": "讓小車車以速度 $speed|做 %dir",
     "{id:category}DadsToolBox": "阿爸的工具箱",
     "DadsToolBox|block": "阿爸的工具箱",
     "DadsToolBox.CarDir.MOVE_FORWARD|block": "前進",
