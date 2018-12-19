@@ -12,8 +12,8 @@ namespace DadsToolBox {
     const PRESCARE_SUB_ADDR = 0xfe;
     const PWM_STEP_MIN = 350;
     const PWM_STEP_MAX = 4096;
-    const PWM_UPDATE_RATE = 500; // Hz
-    const MOTOR_DELAY_TIME = 5000; // us
+    const PWM_UPDATE_RATE = 50; // Hz
+    const MOTOR_DELAY_TIME = 500000; // us
     const STEP_PER_LEVEL = 16;
     const LED_0_SUB_ADDR = 0x06;
     const LED_SUB_ADDR_OFFSET = 4;
@@ -47,13 +47,6 @@ namespace DadsToolBox {
         buffs[0] = PRESCARE_SUB_ADDR;
         buffs[1] = prescare;
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
-
-        /*
-        buffs[0] = MODE_1_SUB_ADDR;
-        buffs[1] = older;
-        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
-        control.waitMicros(5000);
-        */
 
         control.waitMicros(PCA9685_RESTART_DELAY);
         buffs[0] = MODE_1_SUB_ADDR;
@@ -109,12 +102,15 @@ namespace DadsToolBox {
 
     //% blockId=letCarMove block="let car %dir|with speed %speed"
     //% speed.min=0 speed.max=255
-    //% color="#4da6ff"
+    //% color="#007acc"
     export function letCarMove(
         dir: CarDir = CarDir.MOVE_FORWARD,
-        speed: number = 0
+        speed: number = 1
     ): void {
-        letCarMove(CarDir.STOP, 0);
+        doMotorRun('l', 'f', 0);
+        doMotorRun('l', 'b', 0);
+        doMotorRun('r', 'f', 0);
+        doMotorRun('r', 'b', 0);
         control.waitMicros(MOTOR_DELAY_TIME);
 
         speed *= STEP_PER_LEVEL;
@@ -153,7 +149,7 @@ namespace DadsToolBox {
         RED,
         //% blockId="lampGreen" block="GREEN"
         GREEN,
-        //% blockId="lampBlue" blokc="BLUE"
+        //% blockId="lampBlue" block="BLUE"
         BLUE,
         //% blockId="lampWhite" block="WHITE"
         WHITE,
@@ -166,47 +162,58 @@ namespace DadsToolBox {
     }
 
     function doLampOn(r: number = 0, g: number = 0, b: number = 0): void {
-        let buffs = pins.createBuffer(13);
+        if (!_initialized)
+            initPCA9685();
+
+        let buffs = pins.createBuffer(5);
         buffs[0] = LED_0_SUB_ADDR + LAMP_R_CHANNEL * LED_SUB_ADDR_OFFSET;
         buffs[1] = 0;
         buffs[2] = 0;
         buffs[3] = r == 0 ? 0 : r & 0xfe;
         buffs[4] = r == 0 ? 0 : (r >> 8) & 0x0f;
-        buffs[5] = 0;
-        buffs[6] = 0;
-        buffs[7] = g == 0 ? 0 : g & 0xfe;
-        buffs[8] = g == 0 ? 0 : (g >> 8) & 0x0f;
-        buffs[9] = 0;
-        buffs[10] = 0;
-        buffs[11] = b == 0 ? 0 : b & 0xfe;
-        buffs[12] = g == 0 ? 0 : (b >> 8) & 0x0f;
+        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
+
+        buffs[0] = LED_0_SUB_ADDR + LAMP_G_CHANNEL * LED_SUB_ADDR_OFFSET;
+        buffs[1] = 0;
+        buffs[2] = 0;
+        buffs[3] = g == 0 ? 0 : g & 0xfe;
+        buffs[4] = g == 0 ? 0 : (g >> 8) & 0x0f;
+        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
+
+        buffs[0] = LED_0_SUB_ADDR + LAMP_B_CHANNEL * LED_SUB_ADDR_OFFSET;
+        buffs[1] = 0;
+        buffs[2] = 0;
+        buffs[3] = b == 0 ? 0 : b & 0xfe;
+        buffs[4] = b == 0 ? 0 : (b >> 8) & 0x0f;
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
     //% blockId="letLampOnByColor" block="let lamp light on with color %color"
-    //% color="#00cc66"
-    export function letLampOnByColor(color: LampColor = LampColor.NONE): void {
+    //% color="#009933"
+    export function letLampOnByColor(color: LampColor = LampColor.WHITE): void {
+        let full = PWM_STEP_MAX | 0x0ffe;
+
         switch (color) {
             case LampColor.WHITE:
-                doLampOn(PWM_STEP_MAX, PWM_STEP_MAX, PWM_STEP_MAX);
+                doLampOn(full, full, full);
                 break;
             case LampColor.RED:
-                doLampOn(PWM_STEP_MAX, 0, 0);
+                doLampOn(full, 0, 0);
                 break;
             case LampColor.GREEN:
-                doLampOn(0, PWM_STEP_MAX, 0);
+                doLampOn(0, full, 0);
                 break;
             case LampColor.BLUE:
-                doLampOn(0, 0, PWM_STEP_MAX);
+                doLampOn(0, 0, full);
                 break;
             case LampColor.YELLOW:
-                doLampOn(PWM_STEP_MAX, PWM_STEP_MAX, 0);
+                doLampOn(full, full, 0);
                 break;
             case LampColor.CYAN:
-                doLampOn(0, PWM_STEP_MAX, PWM_STEP_MAX);
+                doLampOn(0, full, full);
                 break;
             case LampColor.MAGENTA:
-                doLampOn(PWM_STEP_MAX, 0, PWM_STEP_MAX);
+                doLampOn(full, 0, full);
                 break;
             default:
                 doLampOn();
@@ -216,8 +223,7 @@ namespace DadsToolBox {
 
     //% blockId="letLampOnByRGB" block="let lamp light on with red %r|green %g|blue %b"
     //% r.min=0 r.max=255 g.min=0 g.max=255 b.min=0 b.max=255
-    //% blockExternalInputs=true
-    //% color="#00cc66"
+    //% color="#009933"
     export function letLampOnByRGB(
         r: number = 0,
         g: number = 0,
