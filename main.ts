@@ -165,26 +165,20 @@ namespace DadsToolBox {
         if (!_initialized)
             initPCA9685();
 
-        let buffs = pins.createBuffer(5);
+        let buffs = pins.createBuffer(13);
         buffs[0] = LED_0_SUB_ADDR + LAMP_R_CHANNEL * LED_SUB_ADDR_OFFSET;
         buffs[1] = 0;
         buffs[2] = 0;
         buffs[3] = r == 0 ? 0 : r & 0xfe;
         buffs[4] = r == 0 ? 0 : (r >> 8) & 0x0f;
-        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
-
-        buffs[0] = LED_0_SUB_ADDR + LAMP_G_CHANNEL * LED_SUB_ADDR_OFFSET;
-        buffs[1] = 0;
-        buffs[2] = 0;
-        buffs[3] = g == 0 ? 0 : g & 0xfe;
-        buffs[4] = g == 0 ? 0 : (g >> 8) & 0x0f;
-        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
-
-        buffs[0] = LED_0_SUB_ADDR + LAMP_B_CHANNEL * LED_SUB_ADDR_OFFSET;
-        buffs[1] = 0;
-        buffs[2] = 0;
-        buffs[3] = b == 0 ? 0 : b & 0xfe;
-        buffs[4] = b == 0 ? 0 : (b >> 8) & 0x0f;
+        buffs[5] = 0;
+        buffs[6] = 0;
+        buffs[7] = g == 0 ? 0 : g & 0xfe;
+        buffs[8] = g == 0 ? 0 : (g >> 8) & 0x0f;
+        buffs[9] = 0;
+        buffs[10] = 0;
+        buffs[11] = b == 0 ? 0 : b & 0xfe;
+        buffs[12] = b == 0 ? 0 : (b >> 8) & 0x0f;
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
