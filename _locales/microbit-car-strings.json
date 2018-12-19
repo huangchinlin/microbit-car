@@ -1,0 +1,4 @@
+{
+  "DadsToolBox.letCarMove|block": "let car %dir with speed %speed",
+  "{id:category}DadsToolBox": "DadsToolBox"
+}
