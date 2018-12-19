@@ -1,9 +1,18 @@
 {
-    "DadsToolBox.CarDir.MOVE_BACKWARD|block": "MOVE BACKWARD",
-    "DadsToolBox.CarDir.MOVE_FORWARD|block": "MOVE FORWARD",
-    "DadsToolBox.CarDir.STOP|block": "STOP",
-    "DadsToolBox.CarDir.TURN_LEFT|block": "TURN LEFT",
-    "DadsToolBox.CarDir.TURN_RIGHT|block": "TURN RIGHT",
-    "DadsToolBox.letCarMove|block": "let car %dir|with speed %speed",
-    "{id:category}DadsToolBox": "DadsToolBox"
+  "DadsToolBox.CarDir.MOVE_BACKWARD|block": "MOVE BACKWARD",
+  "DadsToolBox.CarDir.MOVE_FORWARD|block": "MOVE FORWARD",
+  "DadsToolBox.CarDir.STOP|block": "STOP",
+  "DadsToolBox.CarDir.TURN_LEFT|block": "TURN LEFT",
+  "DadsToolBox.CarDir.TURN_RIGHT|block": "TURN RIGHT",
+  "DadsToolBox.LampColor.CYAN|block": "CYAN",
+  "DadsToolBox.LampColor.GREEN|block": "GREEN",
+  "DadsToolBox.LampColor.MAGENTA|block": "MAGENTA",
+  "DadsToolBox.LampColor.NONE|block": "NONE",
+  "DadsToolBox.LampColor.RED|block": "RED",
+  "DadsToolBox.LampColor.WHITE|block": "WHITE",
+  "DadsToolBox.LampColor.YELLOW|block": "YELLOW",
+  "DadsToolBox.letCarMove|block": "let car %dir|with speed %speed",
+  "DadsToolBox.letLampOnByColor|block": "let lamp light on with color %color",
+  "DadsToolBox.letLampOnByRGB|block": "let lamp light on with red %r|green %g|blue %b",
+  "{id:category}DadsToolBox": "DadsToolBox"
 }
