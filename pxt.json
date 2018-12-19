@@ -9,8 +9,8 @@
     "files": [
         "README.md",
         "main.ts",
-        "_locales/zh-TW/microbit-car-jsdoc-strings.json",
-        "_locales/zh-TW/microbit-car-strings.json"
+        "_locales/zh/microbit-car-jsdoc-strings.json",
+        "_locales/zh/microbit-car-strings.json"
     ],
     "testFiles": ["test.ts"],
     "public": false,
