@@ -2,7 +2,7 @@
  * the module for micro.bit car
  */
 
-//% blockId=main block="Dad's ToolBox"
+//% blockId=DadsToolBox block="Dad's ToolBox"
 //% color="#aa7b0d" weight=20 icon="\uf1b9"
 namespace DadsToolBox {
     const PCA9685_RESTART_DELAY = 500; // us
@@ -103,15 +103,15 @@ namespace DadsToolBox {
     }
 
     export enum CarDir {
-        //% blockId="MOVE_FORWARD block="MOVE FORWARD""
+        //% blockId="forward block="MOVE FORWARD""
         MOVE_FORWARD = 0,
-        //% blockId="TURN_LEFT" block="TURN LEFT"
+        //% blockId="left" block="TURN LEFT"
         TURN_LEFT,
-        //% blockId="TURN_RIGHT block="TURN RIGHT"
+        //% blockId="right block="TURN RIGHT"
         TURN_RIGHT,
-        //% blockId="MOVE_BACKWARD" block="MOVE BACKWARD"
+        //% blockId="backward" block="MOVE BACKWARD"
         MOVE_BACKWARD,
-        //% blockId="STOP" block="STOP"
+        //% blockId="stop" block="STOP"
         STOP
     }
 
