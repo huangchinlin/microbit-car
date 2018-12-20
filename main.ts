@@ -347,7 +347,7 @@ namespace DadsToolBox {
             PulseValue.High,
             PING_DETECTION_DURATION
         );
-        return Math.round(d / MICROSECOND_PER_CENTIMETER);
+        return d / MICROSECOND_PER_CENTIMETER;
     }
 
     //% blockId="detectObstacleByFrontIr" block="detected the obstacle by front IR2"
