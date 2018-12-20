@@ -21,6 +21,9 @@ namespace DadsToolBox {
     const LAMP_R_CHANNEL = 0;
     const LAMP_G_CHANNEL = 1;
     const LAMP_B_CHANNEL = 2;
+    const LAMP_LEFT_CHANNEL = 6;
+    const LAMP_FORWARD_CHANNEL = 7;
+    const LAMP_RIGHT_CHANNEL = 8;
     const LEFT_MOTOR_A_CHANNEL = 12;
     const LEFT_MOTOR_B_CHANEEL = 13;
     const RIGHT_MOTOR_A_CHANNEL = 14;
@@ -93,7 +96,7 @@ namespace DadsToolBox {
         buffs[0] = LED_0_SUB_ADDR + fChannel * LED_SUB_ADDR_OFFSET;
         buffs[1] = 0;
         buffs[2] = 0;
-        buffs[3] = speed & 0xfe;
+        buffs[3] = speed & 0xff;
         buffs[4] = (speed >> 8) & 0x0f;
 
         if (!_initialized) initPCA9685();
@@ -162,22 +165,21 @@ namespace DadsToolBox {
     }
 
     function doLampOn(r: number = 0, g: number = 0, b: number = 0): void {
-        if (!_initialized)
-            initPCA9685();
+        if (!_initialized) initPCA9685();
 
         let buffs = pins.createBuffer(13);
         buffs[0] = LED_0_SUB_ADDR + LAMP_R_CHANNEL * LED_SUB_ADDR_OFFSET;
         buffs[1] = 0;
         buffs[2] = 0;
-        buffs[3] = r == 0 ? 0 : r & 0xfe;
+        buffs[3] = r == 0 ? 0 : r & 0xff;
         buffs[4] = r == 0 ? 0 : (r >> 8) & 0x0f;
         buffs[5] = 0;
         buffs[6] = 0;
-        buffs[7] = g == 0 ? 0 : g & 0xfe;
+        buffs[7] = g == 0 ? 0 : g & 0xff;
         buffs[8] = g == 0 ? 0 : (g >> 8) & 0x0f;
         buffs[9] = 0;
         buffs[10] = 0;
-        buffs[11] = b == 0 ? 0 : b & 0xfe;
+        buffs[11] = b == 0 ? 0 : b & 0xff;
         buffs[12] = b == 0 ? 0 : (b >> 8) & 0x0f;
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
@@ -224,5 +226,92 @@ namespace DadsToolBox {
         b: number = 0
     ): void {
         doLampOn(r * STEP_PER_LEVEL, g * STEP_PER_LEVEL, b * STEP_PER_LEVEL);
+    }
+
+    export enum LampDir {
+        //% blockId="leftLamp" block="LEFT LAMP"
+        LEFT_LAMP = 0,
+        //% blockId="forwardLamp" block="FORWARD LAMP"
+        FORWARD_LAMP,
+        //% blockId="rightLamp" block="RIGHT LAMP"
+        RIGHT_LAMP
+    }
+
+    export enum LampDirStatus {
+        //blockId="lampDirOn" block="ON"
+        ON = 0,
+        //blockId="lampDirOff" block="OFF"
+        OFF
+    }
+
+    function setLampDir(channel: number, status: boolean): void {
+        let hByte = status ? 0 : 0x0f;
+        let lByte = status ? 0 : 0xff;
+        let buffs = pins.createBuffer(13);
+        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * LAMP_LEFT_CHANNEL;
+        buffs[1] = 0;
+        buffs[2] = 0;
+        buffs[3] = channel == LAMP_LEFT_CHANNEL ? lByte : 0xff;
+        buffs[4] = channel == LAMP_LEFT_CHANNEL ? hByte : 0x0f;
+        buffs[5] = 0;
+        buffs[6] = 0;
+        buffs[7] = channel == LAMP_FORWARD_CHANNEL ? lByte : 0xff;
+        buffs[8] = channel == LAMP_FORWARD_CHANNEL ? hByte : 0x0f;
+        buffs[9] = 0;
+        buffs[10] = 0;
+        buffs[11] = channel == LAMP_RIGHT_CHANNEL ? lByte : 0xff;
+        buffs[12] = channel == LAMP_RIGHT_CHANNEL ? hByte : 0x0f;
+        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
+    }
+
+    function setSingleDirLamp(channel: number, value: number): void {
+        value &= 0xfff;
+        value != value;
+        value &= 0xfff;
+
+        let buffs = pins.createBuffer(5);
+        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * channel;
+        buffs[1] = 0;
+        buffs[2] = 0;
+        buffs[3] = value & 0xff;
+        buffs[4] = (value >> 8) & 0x0f;
+        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
+    }
+
+    function getDirLampChannel(dir: LampDir): number {
+        switch (dir) {
+            case LampDir.LEFT_LAMP:
+                return LAMP_LEFT_CHANNEL;
+            case LampDir.FORWARD_LAMP:
+                return LAMP_FORWARD_CHANNEL;
+            case LampDir.RIGHT_LAMP:
+                return LAMP_RIGHT_CHANNEL;
+            default:
+                return 0;
+        }
+    }
+
+    //% blockId="turnDirLampOn" block="turn %dir| on"
+    //% color="#009933"
+    export function turnDirLampOn(dir: LampDir = LampDir.LEFT_LAMP): void {
+        let channel = getDirLampChannel(dir);
+        if (channel > 0) setLampDir(channel, true);
+    }
+
+    //% blockId="letSingleDirLampFlash" block="let %dir| flash with level %level"
+    //% color="#009933" level.min=0 level.max=255
+    export function letSingleDirLampFlash(
+        dir: LampDir = LampDir.LEFT_LAMP,
+        level: number = 0
+    ): void {
+        let channel = getDirLampChannel(dir);
+        level = level == 255 ? 0xfff : (level * STEP_PER_LEVEL) & 0xfff;
+        if (channel > 0) setSingleDirLamp(channel, level);
+    }
+
+    //% blockId="turnAllDirLampOff" block="turn all direction lamp off"
+    //% color="#009933"
+    export function turnAllDirLampOff(): void {
+        setLampDir(-1, false);
     }
 }
