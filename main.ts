@@ -228,7 +228,7 @@ namespace DadsToolBox {
         }
     }
 
-    //% blockId="turnMainLampOnWithRGB" block="turn lamp on with red %r|green %g|blue %b"
+    //% blockId="turnMainLampOnWithRGB" block="turn main lamp on with red %r|green %g|blue %b"
     //% r.min=0 r.max=255 g.min=0 g.max=255 b.min=0 b.max=255
     //% color="#009933"
     export function turnMainLampOnWithRGB(
