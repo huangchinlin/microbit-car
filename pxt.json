@@ -1,6 +1,6 @@
 {
     "name": "microbit-car",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "description": "",
     "dependencies": {
         "core": "*",
@@ -16,5 +16,5 @@
         "test.ts"
     ],
     "public": false,
-    "installedVersion": "workspace:7ea0ea48-de11-4785-b7a4-41c8c23daa39"
+    "installedVersion": "workspace:35563653-7367-48cf-0f04-dc9bbfaf9e40"
 }

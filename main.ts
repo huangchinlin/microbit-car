@@ -21,26 +21,26 @@ namespace DadsToolBox {
     const LAMP_R_CHANNEL = 0;
     const LAMP_G_CHANNEL = 1;
     const LAMP_B_CHANNEL = 2;
-    const LAMP_LEFT_CHANNEL = 6;
-    const LAMP_FORWARD_CHANNEL = 7;
-    const LAMP_RIGHT_CHANNEL = 8;
+    const LAMP_RIGHT_CHANNEL = 6;
+    const LAMP_LEFT_CHANNEL = 7;
+    const LAMP_FORWARD_CHANNEL = 8;
     const LEFT_MOTOR_A_CHANNEL = 12;
     const LEFT_MOTOR_B_CHANEEL = 13;
     const RIGHT_MOTOR_A_CHANNEL = 14;
     const RIGHT_MOTOR_B_CHANNEL = 15;
 
-    const PING_TX_PIN = 14;
-    const PING_RX_PIN = 15;
+    const PING_TX_PIN = DigitalPin.P14;
+    const PING_RX_PIN = DigitalPin.P15;
     const PING_MAX_DISTANCE = 400; // cm
     const MICROSECOND_PER_CENTIMETER = 58;
     const PING_DETECTION_DURATION =
         PING_MAX_DISTANCE * MICROSECOND_PER_CENTIMETER + 100;
 
-    const FRONT_IR_TX_PIN = 9;
-    const FRONT_IR_RX_PIN = 3;
+    const FRONT_IR_TX_PIN = DigitalPin.P9;
+    const FRONT_IR_RX_PIN = AnalogPin.P3;
     const BOUNDARY_OF_DETECTED = 800;
-    const BOTTOM_LEFT_IR_RX_PIN = 2;
-    const BOTTOM_RIGHT_IR_RX_PIN = 1;
+    const BOTTOM_LEFT_IR_RX_PIN = AnalogPin.P2;
+    const BOTTOM_RIGHT_IR_RX_PIN = AnalogPin.P1;
     const BOUNDARY_OF_COLOR = 500;
 
     let _initialized = false;
@@ -265,19 +265,19 @@ namespace DadsToolBox {
         let hByte = status ? 0 : 0x0f;
         let lByte = status ? 0 : 0xff;
         let buffs = pins.createBuffer(13);
-        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * LAMP_LEFT_CHANNEL;
+        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * LAMP_RIGHT_CHANNEL;
         buffs[1] = 0;
         buffs[2] = 0;
-        buffs[3] = channel == LAMP_LEFT_CHANNEL ? lByte : 0xff;
-        buffs[4] = channel == LAMP_LEFT_CHANNEL ? hByte : 0x0f;
+        buffs[3] = channel == LAMP_RIGHT_CHANNEL ? lByte : 0xff;
+        buffs[4] = channel == LAMP_RIGHT_CHANNEL ? hByte : 0x0f;
         buffs[5] = 0;
         buffs[6] = 0;
-        buffs[7] = channel == LAMP_FORWARD_CHANNEL ? lByte : 0xff;
-        buffs[8] = channel == LAMP_FORWARD_CHANNEL ? hByte : 0x0f;
+        buffs[7] = channel == LAMP_LEFT_CHANNEL ? lByte : 0xff;
+        buffs[8] = channel == LAMP_LEFT_CHANNEL ? hByte : 0x0f;
         buffs[9] = 0;
         buffs[10] = 0;
-        buffs[11] = channel == LAMP_RIGHT_CHANNEL ? lByte : 0xff;
-        buffs[12] = channel == LAMP_RIGHT_CHANNEL ? hByte : 0x0f;
+        buffs[11] = channel == LAMP_FORWARD_CHANNEL ? lByte : 0xff;
+        buffs[12] = channel == LAMP_FORWARD_CHANNEL ? hByte : 0x0f;
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
@@ -347,11 +347,10 @@ namespace DadsToolBox {
             PulseValue.High,
             PING_DETECTION_DURATION
         );
-        d /= MICROSECOND_PER_CENTIMETER;
-        return d;
+        return Math.round(d / MICROSECOND_PER_CENTIMETER);
     }
 
-    //% blockId="detectObstacleByFrontIr" block="detected the obstacle by front IR"
+    //% blockId="detectObstacleByFrontIr" block="detected the obstacle by front IR2"
     //% color="#cc0000"
     export function detectObstacleByFrontIr(): boolean {
         let ret = false;
@@ -376,8 +375,8 @@ namespace DadsToolBox {
         WHITE
     }
 
-    function isBlackLine(value: number): boolean {
-        return value > BOUNDARY_OF_COLOR;
+    function isWhiteLine(value: number): boolean {
+        return value < BOUNDARY_OF_COLOR;
     }
 
     //% blockId="detectLineByBottomIr" block="detected %style| on %side by bottom IR"
@@ -394,10 +393,10 @@ namespace DadsToolBox {
         let v = pins.analogReadPin(pin);
         switch (style) {
             case LineStyle.BLACK:
-                ret = isBlackLine(v);
+                ret = !isWhiteLine(v);
                 break;
             case LineStyle.WHITE:
-                ret = !isBlackLine(v);
+                ret = isWhiteLine(v);
                 break;
         }
         return ret;
