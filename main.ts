@@ -145,9 +145,7 @@ namespace DadsToolBox {
         }
     }
 
-    export enum LampColor {
-        //% blockId="lampNone" block="NONE"
-        NONE = 0,
+    export enum MainLampColor {
         //% blockId="lampRed" block="RED"
         RED,
         //% blockId="lampGreen" block="GREEN"
@@ -164,7 +162,7 @@ namespace DadsToolBox {
         MAGENTA
     }
 
-    function doLampOn(r: number = 0, g: number = 0, b: number = 0): void {
+    function setMainLamp(r: number = 0, g: number = 0, b: number = 0): void {
         if (!_initialized) initPCA9685();
 
         let buffs = pins.createBuffer(13);
@@ -184,51 +182,56 @@ namespace DadsToolBox {
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
-    //% blockId="letLampOnByColor" block="let lamp light on with color %color"
+    //% blockId="turnMainLampOnWithColor" block="turn main lamp on with color %color"
     //% color="#009933"
-    export function letLampOnByColor(color: LampColor = LampColor.WHITE): void {
+    export function turnMainLampOnWithColor(
+        color: MainLampColor = MainLampColor.WHITE
+    ): void {
         let full = PWM_STEP_MAX | 0x0ffe;
 
         switch (color) {
-            case LampColor.WHITE:
-                doLampOn(full, full, full);
+            case MainLampColor.WHITE:
+                setMainLamp(full, full, full);
                 break;
-            case LampColor.RED:
-                doLampOn(full, 0, 0);
+            case MainLampColor.RED:
+                setMainLamp(full, 0, 0);
                 break;
-            case LampColor.GREEN:
-                doLampOn(0, full, 0);
+            case MainLampColor.GREEN:
+                setMainLamp(0, full, 0);
                 break;
-            case LampColor.BLUE:
-                doLampOn(0, 0, full);
+            case MainLampColor.BLUE:
+                setMainLamp(0, 0, full);
                 break;
-            case LampColor.YELLOW:
-                doLampOn(full, full, 0);
+            case MainLampColor.YELLOW:
+                setMainLamp(full, full, 0);
                 break;
-            case LampColor.CYAN:
-                doLampOn(0, full, full);
+            case MainLampColor.CYAN:
+                setMainLamp(0, full, full);
                 break;
-            case LampColor.MAGENTA:
-                doLampOn(full, 0, full);
-                break;
-            default:
-                doLampOn();
+            case MainLampColor.MAGENTA:
+                setMainLamp(full, 0, full);
                 break;
         }
     }
 
-    //% blockId="letLampOnByRGB" block="let lamp light on with red %r|green %g|blue %b"
+    //% blockId="turnMainLampOnWithRGB" block="turn lamp on with red %r|green %g|blue %b"
     //% r.min=0 r.max=255 g.min=0 g.max=255 b.min=0 b.max=255
     //% color="#009933"
-    export function letLampOnByRGB(
+    export function turnMainLampOnWithRGB(
         r: number = 0,
         g: number = 0,
         b: number = 0
     ): void {
-        doLampOn(r * STEP_PER_LEVEL, g * STEP_PER_LEVEL, b * STEP_PER_LEVEL);
+        setMainLamp(r * STEP_PER_LEVEL, g * STEP_PER_LEVEL, b * STEP_PER_LEVEL);
     }
 
-    export enum LampDir {
+    //% blockId="turnMainLampOff" block="turn main lamp off"
+    //% color="#009933"
+    export function turnMainLampOff(): void {
+        setMainLamp(0, 0, 0);
+    }
+
+    export enum DirLamp {
         //% blockId="leftLamp" block="LEFT LAMP"
         LEFT_LAMP = 0,
         //% blockId="forwardLamp" block="FORWARD LAMP"
@@ -237,14 +240,14 @@ namespace DadsToolBox {
         RIGHT_LAMP
     }
 
-    export enum LampDirStatus {
-        //blockId="lampDirOn" block="ON"
+    export enum DirLampStatus {
+        //blockId="DirLampOn" block="ON"
         ON = 0,
-        //blockId="lampDirOff" block="OFF"
+        //blockId="DirLampOff" block="OFF"
         OFF
     }
 
-    function setLampDir(channel: number, status: boolean): void {
+    function setDirLamp(channel: number, status: boolean): void {
         let hByte = status ? 0 : 0x0f;
         let lByte = status ? 0 : 0xff;
         let buffs = pins.createBuffer(13);
@@ -278,13 +281,13 @@ namespace DadsToolBox {
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
-    function getDirLampChannel(dir: LampDir): number {
+    function getDirLampChannel(dir: DirLamp): number {
         switch (dir) {
-            case LampDir.LEFT_LAMP:
+            case DirLamp.LEFT_LAMP:
                 return LAMP_LEFT_CHANNEL;
-            case LampDir.FORWARD_LAMP:
+            case DirLamp.FORWARD_LAMP:
                 return LAMP_FORWARD_CHANNEL;
-            case LampDir.RIGHT_LAMP:
+            case DirLamp.RIGHT_LAMP:
                 return LAMP_RIGHT_CHANNEL;
             default:
                 return 0;
@@ -293,15 +296,15 @@ namespace DadsToolBox {
 
     //% blockId="turnDirLampOn" block="turn %dir| on"
     //% color="#009933"
-    export function turnDirLampOn(dir: LampDir = LampDir.LEFT_LAMP): void {
+    export function turnDirLampOn(dir: DirLamp = DirLamp.LEFT_LAMP): void {
         let channel = getDirLampChannel(dir);
-        if (channel > 0) setLampDir(channel, true);
+        if (channel > 0) setDirLamp(channel, true);
     }
 
     //% blockId="letSingleDirLampFlash" block="let %dir| flash with level %level"
     //% color="#009933" level.min=0 level.max=255
     export function letSingleDirLampFlash(
-        dir: LampDir = LampDir.LEFT_LAMP,
+        dir: DirLamp = DirLamp.LEFT_LAMP,
         level: number = 0
     ): void {
         let channel = getDirLampChannel(dir);
@@ -312,6 +315,6 @@ namespace DadsToolBox {
     //% blockId="turnAllDirLampOff" block="turn all direction lamp off"
     //% color="#009933"
     export function turnAllDirLampOff(): void {
-        setLampDir(-1, false);
+        setDirLamp(-1, false);
     }
 }
