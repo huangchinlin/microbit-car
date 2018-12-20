@@ -15,7 +15,7 @@
     "DadsToolBox.MainLampColor.YELLOW|block": "黃色",
     "DadsToolBox.MainLampColor.BLUE|block": "藍色",
     "DadsToolBox.turnMainLampOnWithColor|block": "打開小車車的 %color 大燈",
-    "DadsToolBox.turnMainLampOnWithRGB|block": "打開小車車的大燈, 依照 紅 %r|綠 %g|藍 %b 調色",
+    "DadsToolBox.turnMainLampOnWithRGB|block": "打開小車車的大燈, 依照 (紅 %r|綠 %g|藍 %b )調色",
     "DadsToolBox.turnMainLampOff|block": "關掉小車車的大燈",
     "DadsToolBox.DetectSide.LEFT|block": "左側",
     "DadsToolBox.DetectSide.RIGHT|block": "右側",
