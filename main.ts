@@ -351,7 +351,7 @@ namespace DadsToolBox {
         return d;
     }
 
-    //% blockId="detectObstacleByFrontIr" block="is the obstacle detected by front IR?"
+    //% blockId="detectObstacleByFrontIr" block="detected the obstacle by front IR"
     //% color="#cc0000"
     export function detectObstacleByFrontIr(): boolean {
         let ret = false;
@@ -380,7 +380,7 @@ namespace DadsToolBox {
         return value > BOUNDARY_OF_COLOR;
     }
 
-    //% blockId="detectLineByBottomIr" block="is %style| detected on %side by bottom IR?"
+    //% blockId="detectLineByBottomIr" block="detected %style| on %side by bottom IR"
     //% color="#cc0000"
     export function detectLineByBottomIr(
         side: DetectSide = DetectSide.LEFT,
