@@ -29,6 +29,20 @@ namespace DadsToolBox {
     const RIGHT_MOTOR_A_CHANNEL = 14;
     const RIGHT_MOTOR_B_CHANNEL = 15;
 
+    const PING_TX_PIN = 14;
+    const PING_RX_PIN = 15;
+    const PING_MAX_DISTANCE = 400; // cm
+    const MICROSECOND_PER_CENTIMETER = 58;
+    const PING_DETECTION_DURATION =
+        PING_MAX_DISTANCE * MICROSECOND_PER_CENTIMETER + 100;
+
+    const FRONT_IR_TX_PIN = 9;
+    const FRONT_IR_RX_PIN = 3;
+    const BOUNDARY_OF_DETECTED = 800;
+    const BOTTOM_LEFT_IR_RX_PIN = 2;
+    const BOTTOM_RIGHT_IR_RX_PIN = 1;
+    const BOUNDARY_OF_COLOR = 500;
+
     let _initialized = false;
 
     function setPwmUpdateRate(rate: number): void {
@@ -316,5 +330,76 @@ namespace DadsToolBox {
     //% color="#009933"
     export function turnAllDirLampOff(): void {
         setDirLamp(-1, false);
+    }
+
+    //% blockId="getDistanceByPing" block="the distance in cm of obstace."
+    //% color="#e67300"
+    export function getDistanceByPing(): number {
+        pins.setPull(PING_TX_PIN, PinPullMode.PullDown);
+        pins.digitalWritePin(PING_TX_PIN, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(PING_TX_PIN, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(PING_TX_PIN, 0);
+
+        let d = pins.pulseIn(
+            PING_RX_PIN,
+            PulseValue.High,
+            PING_DETECTION_DURATION
+        );
+        d /= MICROSECOND_PER_CENTIMETER;
+        return d;
+    }
+
+    //% blockId="detectObstacleByFrontIr" block="is" the obstacle detected by front IR?"
+    //% color="#cc0000"
+    export function detectObstacleByFrontIr(): boolean {
+        let ret = false;
+        pins.digitalWritePin(FRONT_IR_TX_PIN, 0);
+        let rec = pins.analogReadPin(FRONT_IR_RX_PIN);
+        if (rec < BOUNDARY_OF_DETECTED) ret = true;
+        pins.digitalWritePin(FRONT_IR_TX_PIN, 1);
+        return ret;
+    }
+
+    export enum DetectSide {
+        //% blockId="leftSide" block="LEFT SIDE"
+        LEFT = 0,
+        //% blockId="rightSide" block="RIGHT SIDE"
+        RIGHT
+    }
+
+    export enum LineStyle {
+        //% blockId="blackLine" block="BLACK LINE"
+        BLACK = 0,
+        //% blockId="whiteLine" block="WHITE LINE"
+        WHITE
+    }
+
+    function isBlackLine(value: number): boolean {
+        return value > BOUNDARY_OF_COLOR;
+    }
+
+    //% blockId="detectLineByBottomIr" block="is %style| detected on %side by bottom IR?"
+    //% color="#cc0000"
+    export function detectLineByBottomIr(
+        side: DetectSide = DetectSide.LEFT,
+        style: LineStyle = LineStyle.BLACK
+    ): boolean {
+        let ret = false;
+        let pin =
+            side == DetectSide.LEFT
+                ? BOTTOM_LEFT_IR_RX_PIN
+                : BOTTOM_RIGHT_IR_RX_PIN;
+        let v = pins.analogReadPin(pin);
+        switch (style) {
+            case LineStyle.BLACK:
+                ret = isBlackLine(v);
+                break;
+            case LineStyle.WHITE:
+                ret = !isBlackLine(v);
+                break;
+        }
+        return ret;
     }
 }
