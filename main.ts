@@ -351,7 +351,7 @@ namespace DadsToolBox {
         return d;
     }
 
-    //% blockId="detectObstacleByFrontIr" block="is" the obstacle detected by front IR?"
+    //% blockId="detectObstacleByFrontIr" block="is the obstacle detected by front IR?"
     //% color="#cc0000"
     export function detectObstacleByFrontIr(): boolean {
         let ret = false;
