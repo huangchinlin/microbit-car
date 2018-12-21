@@ -121,7 +121,7 @@ namespace DadsToolBox {
     //% speed.min=50 speed.max=255
     //% color="#007acc"
     export function letCarMove(
-        dir: CarDir = CarDir.MOVE_FORWARD,
+        dir: CarDir = CarDir.STOP,
         speed: number = 50
     ): void {
         doMotorRun('l', 'f', 0);
