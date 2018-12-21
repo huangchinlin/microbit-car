@@ -5,7 +5,7 @@
     "dependencies": {
         "core": "*",
         "bluetooth": "*",
-        "Yahboom_mbit_IR": "github:huangchinlin/yahboom_mbit_ir#5c6f0a2d20e3d390adff1082fa7b4c57aa1b0a7d"
+        "Yahboom_mbit_IR": "github:huangchinlin/yahboom_mbit_ir#9d6b13b5c99d3a9c17cb51b0a584e75564940586"
     },
     "files": [
         "README.md",

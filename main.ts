@@ -118,11 +118,11 @@ namespace DadsToolBox {
     }
 
     //% blockId=letCarMove block="let car %dir|with speed %speed"
-    //% speed.min=0 speed.max=255
+    //% speed.min=50 speed.max=255
     //% color="#007acc"
     export function letCarMove(
         dir: CarDir = CarDir.MOVE_FORWARD,
-        speed: number = 1
+        speed: number = 50
     ): void {
         doMotorRun('l', 'f', 0);
         doMotorRun('l', 'b', 0);
