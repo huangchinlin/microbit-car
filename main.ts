@@ -10,7 +10,7 @@ namespace DadsToolBox {
     const PCA9685_BASE_ADDR = 0x41;
     const MODE_1_SUB_ADDR = 0x00;
     const PRESCARE_SUB_ADDR = 0xfe;
-    const PWM_STEP_MIN = 350;
+    const PWM_STEP_MIN = 800;
     const PWM_STEP_MAX = 4096;
     const PWM_UPDATE_RATE = 50; // Hz
     const MOTOR_DELAY_TIME = 500000; // us
