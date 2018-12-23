@@ -321,7 +321,8 @@ namespace DadsToolBox {
     }
 
     //% blockId="letDirLampFlash" block="let all direction flash with interval %duration seconds"
-    //$ duration.min=0 duration.max=10
+    //% duration.min=0 duration.max=10
+    //% color="#009933"
     export function letDirLampFlash(duration: number = 0): void {
         duration *= 1000;
         turnAllDirLampOff();
