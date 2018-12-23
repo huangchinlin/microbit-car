@@ -272,7 +272,7 @@ namespace DadsToolBox {
         buffs[0] =
             LED_0_SUB_ADDR +
             LED_SUB_ADDR_OFFSET *
-                (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
+            (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
         buffs[1] = 0;
         buffs[2] = 0;
         buffs[3] = channel == -1 ? 0xff : lByte;
@@ -321,7 +321,7 @@ namespace DadsToolBox {
         setDirLamp(-1, false);
     }
 
-    //% blockId="letDirLampFlash" block="let all direction flash with interval %duration seconds"
+    //% blockId="letDirLampFlash" block="let all direction as marquees with interval %duration seconds"
     //% duration.min=0 duration.max=10
     //% color="#009933"
     export function letDirLampFlash(duration: number = 0): void {
