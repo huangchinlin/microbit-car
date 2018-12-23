@@ -264,6 +264,7 @@ namespace DadsToolBox {
     }
 
     function setDirLamp(channel: number, status: boolean): void {
+        if (!_initialized) initPCA9685();        
         let hByte = status ? 0 : 0x0f;
         let lByte = status ? 0 : 0xff;
         let buffs = pins.createBuffer(channel == -1 ? 13 : 5);
@@ -302,7 +303,6 @@ namespace DadsToolBox {
     //% color="#009933"
     export function turnDirLamp(dir: DirLamp = DirLamp.LEFT_LAMP, status: DirLampStatus = DirLampStatus.OFF): void {
         let channel = getDirLampChannel(dir);
-        basic.showNumber(channel);
         if (channel > 0) setDirLamp(channel, status == DirLampStatus.ON ? true : false);
     }
 
