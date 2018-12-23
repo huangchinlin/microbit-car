@@ -352,7 +352,7 @@ namespace DadsToolBox {
                 basic.pause(duration);
                 turnDirLamp(DirLamp.FORWARD_LAMP, DirLampStatus.OFF);
                 basic.pause(duration);
-                turnDirLamp(DirLamp.RIGHT_LAMP, DirLampStatus.OFF);
+                turnDirLamp(DirLamp.LEFT_LAMP, DirLampStatus.OFF);
                 basic.pause(duration);
             }
         });
