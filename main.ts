@@ -317,6 +317,7 @@ namespace DadsToolBox {
     //% blockId="turnAllDirLampOff" block="turn all direction lamp off"
     //% color="#009933"
     export function turnAllDirLampOff(): void {
+        _dir_lamp_flash = false;
         setDirLamp(-1, false);
     }
 
@@ -326,6 +327,7 @@ namespace DadsToolBox {
     export function letDirLampFlash(duration: number = 0): void {
         duration *= 1000;
         turnAllDirLampOff();
+        _dir_lamp_flash = true;
         control.inBackground(() => {
             while (_dir_lamp_flash) {
                 turnDirLamp(DirLamp.LEFT_LAMP, DirLampStatus.ON);
