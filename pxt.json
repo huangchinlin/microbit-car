@@ -13,7 +13,9 @@
         "_locales/zh/microbit-car-jsdoc-strings.json",
         "_locales/zh/microbit-car-strings.json"
     ],
-    "testFiles": ["test.ts"],
+    "testFiles": [
+        "test.ts"
+    ],
     "public": false,
     "installedVersion": "workspace:35563653-7367-48cf-0f04-dc9bbfaf9e40"
 }
