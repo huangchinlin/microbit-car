@@ -43,7 +43,10 @@ namespace DadsToolBox {
     const BOTTOM_RIGHT_IR_RX_PIN = AnalogPin.P1;
     const BOUNDARY_OF_COLOR = 500;
 
+    const FLASH_STEP_DURATION = 100000; // us
+
     let _initialized = false;
+    let _dir_flash_run = false;
 
     function setPwmUpdateRate(rate: number): void {
         let prescare = PCA9685_OSC_FREQENCE / PWM_STEP_MAX / rate - 1;
@@ -322,14 +325,33 @@ namespace DadsToolBox {
         level: number = 0
     ): void {
         let channel = getDirLampChannel(dir);
-        level = level == 255 ? 0xfff : (level * STEP_PER_LEVEL) & 0xfff;
-        if (channel > 0) setSingleDirLamp(channel, level);
+        let fun = (l: number) =>
+            l == 255 ? 0xfff : (l * STEP_PER_LEVEL) & 0xfff;
+        if (channel > 0) {
+            _dir_flash_run = true;
+            control.inBackground(() => {
+                while (_dir_flash_run) {
+                    for (let i = 0; i < level; i++) {
+                        if (!_dir_flash_run) break;
+                        setSingleDirLamp(channel, fun(level));
+                        control.waitMicros(FLASH_STEP_DURATION);
+                    }
+
+                    for (let i = level; i > 0; i--) {
+                        if (!_dir_flash_run) break;
+                        setSingleDirLamp(channel, fun(level));
+                        control.waitMicros(FLASH_STEP_DURATION);
+                    }
+                }
+            });
+        }
     }
 
     //% blockId="turnAllDirLampOff" block="turn all direction lamp off"
     //% color="#009933"
     export function turnAllDirLampOff(): void {
         setDirLamp(-1, false);
+        _dir_flash_run = false;
     }
 
     //% blockId="getDistanceByPing" block="the distance in cm of obstace."
