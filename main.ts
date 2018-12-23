@@ -43,8 +43,6 @@ namespace DadsToolBox {
     const BOTTOM_RIGHT_IR_RX_PIN = AnalogPin.P1;
     const BOUNDARY_OF_COLOR = 500;
 
-    const FLASH_STEP_DURATION = 10000000; // us
-
     let _initialized = false;
     let _dir_lamp_flash = false;
 
