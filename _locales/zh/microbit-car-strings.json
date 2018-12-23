@@ -30,5 +30,6 @@
     "DadsToolBox.turnAllDirLampOff|block": "關掉小車車所有的方向燈",
     "DadsToolBox.turnDirLamp|block": "讓小車車的 %dir| %status",
     "DadsToolBox.DirLampStatus.OFF|block": "闗",
-    "DadsToolBox.DirLampStatus.ON|block": "開"
+    "DadsToolBox.DirLampStatus.ON|block": "開",
+    "DadsToolBox.letDirLampFlash|block": "讓所有方向燈每 %duration 秒閃爍"
 }

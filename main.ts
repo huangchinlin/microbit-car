@@ -46,6 +46,7 @@ namespace DadsToolBox {
     const FLASH_STEP_DURATION = 10000000; // us
 
     let _initialized = false;
+    let _dir_lamp_flash = false;
 
     function setPwmUpdateRate(rate: number): void {
         let prescare = PCA9685_OSC_FREQENCE / PWM_STEP_MAX / rate - 1;
@@ -317,6 +318,41 @@ namespace DadsToolBox {
     //% color="#009933"
     export function turnAllDirLampOff(): void {
         setDirLamp(-1, false);
+    }
+
+    //% blockId="letDirLampFlash" block="let all direction flash with interval %duration seconds"
+    //$ duration.min=0 duration.max=10
+    export function letDirLampFlash(duration: number = 0): void {
+        duration *= 1000;
+        turnAllDirLampOff();
+        control.inBackground(() => {
+            while (_dir_lamp_flash) {
+                turnDirLamp(DirLamp.LEFT_LAMP, DirLampStatus.ON);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.FORWARD_LAMP, DirLampStatus.ON);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.RIGHT_LAMP, DirLampStatus.ON);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.LEFT_LAMP, DirLampStatus.OFF);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.FORWARD_LAMP, DirLampStatus.OFF);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.RIGHT_LAMP, DirLampStatus.OFF);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.RIGHT_LAMP, DirLampStatus.ON);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.FORWARD_LAMP, DirLampStatus.ON);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.LEFT_LAMP, DirLampStatus.ON);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.RIGHT_LAMP, DirLampStatus.OFF);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.FORWARD_LAMP, DirLampStatus.OFF);
+                basic.pause(duration);
+                turnDirLamp(DirLamp.RIGHT_LAMP, DirLampStatus.OFF);
+                basic.pause(duration);
+            }
+        });
     }
 
     //% blockId="getDistanceByPing" block="the distance in cm of obstace."

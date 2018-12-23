@@ -24,6 +24,7 @@
   "DadsToolBox.detectObstacleByFrontIr|block": "detected the obstacle by front IR2",
   "DadsToolBox.getDistanceByPing|block": "the distance in cm of obstace.",
   "DadsToolBox.letCarMove|block": "let car %dir|with speed %speed",
+  "DadsToolBox.letDirLampFlash|block": "let all direction flash with interval %duration seconds",
   "DadsToolBox.turnAllDirLampOff|block": "turn all direction lamp off",
   "DadsToolBox.turnDirLamp|block": "turn %dir| %status",
   "DadsToolBox.turnMainLampOff|block": "turn main lamp off",
