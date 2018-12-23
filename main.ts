@@ -355,6 +355,7 @@ namespace DadsToolBox {
                 turnDirLamp(DirLamp.LEFT_LAMP, DirLampStatus.OFF);
                 basic.pause(duration);
             }
+            turnAllDirLampOff();
         });
     }
 
