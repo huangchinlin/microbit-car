@@ -27,7 +27,8 @@
     "DadsToolBox.detectLineByBottomIr|block": "車底 %side| 的紅外線偵測到 %style",
     "DadsToolBox.detectObstacleByFrontIr|block": "車前紅外線偵測到障礙物",
     "DadsToolBox.getDistanceByPing|block": "超音波偵測前方障礙物距離 (公分)",
-    "DadsToolBox.letSingleDirLampFlash|block": "讓小車車的 %dir| 依等級 %level| 閃爍",
     "DadsToolBox.turnAllDirLampOff|block": "關掉小車車所有的方向燈",
-    "DadsToolBox.turnDirLampOn|block": "打開小車車的 %dir"
+    "DadsToolBox.turnDirLamp|block": "讓小車車的 %dir| %status",
+    "DadsToolBox.DirLampStatus.OFF|block": "關",
+    "DadsToolBox.DirLampStatus.ON|block": "開"
 }

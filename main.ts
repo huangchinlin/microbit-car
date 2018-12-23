@@ -43,10 +43,9 @@ namespace DadsToolBox {
     const BOTTOM_RIGHT_IR_RX_PIN = AnalogPin.P1;
     const BOUNDARY_OF_COLOR = 500;
 
-    const FLASH_STEP_DURATION = 100000; // us
+    const FLASH_STEP_DURATION = 10000000; // us
 
     let _initialized = false;
-    let _dir_flash_run = false;
 
     function setPwmUpdateRate(rate: number): void {
         let prescare = PCA9685_OSC_FREQENCE / PWM_STEP_MAX / rate - 1;
@@ -267,34 +266,22 @@ namespace DadsToolBox {
     function setDirLamp(channel: number, status: boolean): void {
         let hByte = status ? 0 : 0x0f;
         let lByte = status ? 0 : 0xff;
-        let buffs = pins.createBuffer(13);
-        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * LAMP_RIGHT_CHANNEL;
+        let buffs = pins.createBuffer(channel == -1 ? 13 : 5);
+        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
         buffs[1] = 0;
         buffs[2] = 0;
-        buffs[3] = channel == LAMP_RIGHT_CHANNEL ? lByte : 0xff;
-        buffs[4] = channel == LAMP_RIGHT_CHANNEL ? hByte : 0x0f;
-        buffs[5] = 0;
-        buffs[6] = 0;
-        buffs[7] = channel == LAMP_LEFT_CHANNEL ? lByte : 0xff;
-        buffs[8] = channel == LAMP_LEFT_CHANNEL ? hByte : 0x0f;
-        buffs[9] = 0;
-        buffs[10] = 0;
-        buffs[11] = channel == LAMP_FORWARD_CHANNEL ? lByte : 0xff;
-        buffs[12] = channel == LAMP_FORWARD_CHANNEL ? hByte : 0x0f;
-        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
-    }
-
-    function setSingleDirLamp(channel: number, value: number): void {
-        value &= 0xfff;
-        value != value;
-        value &= 0xfff;
-
-        let buffs = pins.createBuffer(5);
-        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * channel;
-        buffs[1] = 0;
-        buffs[2] = 0;
-        buffs[3] = value & 0xff;
-        buffs[4] = (value >> 8) & 0x0f;
+        buffs[3] = channel == -1 ? 0xff : lByte;
+        buffs[4] = channel == -1 ? 0x0f : hByte;
+        if (channel == -1){
+            buffs[5] = 0;
+            buffs[6] = 0;
+            buffs[7] = 0xff;
+            buffs[8] = 0x0f; 
+            buffs[9] = 0;
+            buffs[10] = 0;
+            buffs[11] = 0xff;
+            buffs[12] = 0x0f;
+        }
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 
@@ -311,47 +298,18 @@ namespace DadsToolBox {
         }
     }
 
-    //% blockId="turnDirLampOn" block="turn %dir| on"
+    //% blockId="turnDirLamp" block="turn %dir| %status"
     //% color="#009933"
-    export function turnDirLampOn(dir: DirLamp = DirLamp.LEFT_LAMP): void {
+    export function turnDirLamp(dir: DirLamp = DirLamp.LEFT_LAMP, status: DirLampStatus = DirLampStatus.OFF): void {
         let channel = getDirLampChannel(dir);
-        if (channel > 0) setDirLamp(channel, true);
-    }
-
-    //% blockId="letSingleDirLampFlash" block="let %dir| flash with level %level"
-    //% color="#009933" level.min=0 level.max=255
-    export function letSingleDirLampFlash(
-        dir: DirLamp = DirLamp.LEFT_LAMP,
-        level: number = 0
-    ): void {
-        let channel = getDirLampChannel(dir);
-        let fun = (l: number) =>
-            l == 255 ? 0xfff : (l * STEP_PER_LEVEL) & 0xfff;
-        if (channel > 0) {
-            _dir_flash_run = true;
-            control.inBackground(() => {
-                while (_dir_flash_run) {
-                    for (let i = 0; i < level; i++) {
-                        if (!_dir_flash_run) break;
-                        setSingleDirLamp(channel, fun(level));
-                        control.waitMicros(FLASH_STEP_DURATION);
-                    }
-
-                    for (let i = level; i > 0; i--) {
-                        if (!_dir_flash_run) break;
-                        setSingleDirLamp(channel, fun(level));
-                        control.waitMicros(FLASH_STEP_DURATION);
-                    }
-                }
-            });
-        }
+        basic.showNumber(channel);
+        if (channel > 0) setDirLamp(channel, status == DirLampStatus.ON ? true : false);
     }
 
     //% blockId="turnAllDirLampOff" block="turn all direction lamp off"
     //% color="#009933"
     export function turnAllDirLampOff(): void {
         setDirLamp(-1, false);
-        _dir_flash_run = false;
     }
 
     //% blockId="getDistanceByPing" block="the distance in cm of obstace."
