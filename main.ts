@@ -257,27 +257,30 @@ namespace DadsToolBox {
     }
 
     export enum DirLampStatus {
-        //blockId="DirLampOn" block="ON"
+        //% blockId="DirLampOn" block="ON"
         ON = 0,
-        //blockId="DirLampOff" block="OFF"
+        //% blockId="DirLampOff" block="OFF"
         OFF
     }
 
     function setDirLamp(channel: number, status: boolean): void {
-        if (!_initialized) initPCA9685();        
+        if (!_initialized) initPCA9685();
         let hByte = status ? 0 : 0x0f;
         let lByte = status ? 0 : 0xff;
         let buffs = pins.createBuffer(channel == -1 ? 13 : 5);
-        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
+        buffs[0] =
+            LED_0_SUB_ADDR +
+            LED_SUB_ADDR_OFFSET *
+                (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
         buffs[1] = 0;
         buffs[2] = 0;
         buffs[3] = channel == -1 ? 0xff : lByte;
         buffs[4] = channel == -1 ? 0x0f : hByte;
-        if (channel == -1){
+        if (channel == -1) {
             buffs[5] = 0;
             buffs[6] = 0;
             buffs[7] = 0xff;
-            buffs[8] = 0x0f; 
+            buffs[8] = 0x0f;
             buffs[9] = 0;
             buffs[10] = 0;
             buffs[11] = 0xff;
@@ -301,9 +304,13 @@ namespace DadsToolBox {
 
     //% blockId="turnDirLamp" block="turn %dir| %status"
     //% color="#009933"
-    export function turnDirLamp(dir: DirLamp = DirLamp.LEFT_LAMP, status: DirLampStatus = DirLampStatus.OFF): void {
+    export function turnDirLamp(
+        dir: DirLamp = DirLamp.LEFT_LAMP,
+        status: DirLampStatus = DirLampStatus.OFF
+    ): void {
         let channel = getDirLampChannel(dir);
-        if (channel > 0) setDirLamp(channel, status == DirLampStatus.ON ? true : false);
+        if (channel > 0)
+            setDirLamp(channel, status == DirLampStatus.ON ? true : false);
     }
 
     //% blockId="turnAllDirLampOff" block="turn all direction lamp off"
