@@ -270,7 +270,7 @@ namespace DadsToolBox {
         buffs[0] =
             LED_0_SUB_ADDR +
             LED_SUB_ADDR_OFFSET *
-            (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
+                (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
         buffs[1] = 0;
         buffs[2] = 0;
         buffs[3] = channel == -1 ? 0xff : lByte;
@@ -372,7 +372,7 @@ namespace DadsToolBox {
             PulseValue.High,
             PING_DETECTION_DURATION
         );
-        return d / MICROSECOND_PER_CENTIMETER;
+        return Math.round(d / MICROSECOND_PER_CENTIMETER);
     }
 
     //% blockId="detectObstacleByFrontIr" block="detected the obstacle by front IR2"
