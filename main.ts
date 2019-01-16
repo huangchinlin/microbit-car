@@ -43,6 +43,13 @@ namespace DadsToolBox {
     const BOTTOM_RIGHT_IR_RX_PIN = AnalogPin.P1;
     const BOUNDARY_OF_COLOR = 500;
 
+    const SERVO_MOTOR_1_CHANNEL = 3;
+    const SERVO_MOTOR_2_CHANNEL = 4;
+    const SERVO_MOTOR_3_CHANNEL = 5;
+    const SERVO_MOTOR_ZERO_POSITION_DURATION = 307;
+    const SERVO_MOTOR_MAX_DEGREE = 90;
+    const SERVO_MOTOR_ZERO_TO_NINRTY_DIRATION = 103;
+
     let _initialized = false;
     let _dir_lamp_flash = false;
 
@@ -425,5 +432,54 @@ namespace DadsToolBox {
                 break;
         }
         return ret;
+    }
+
+    export enum ServoMotorId {
+        //% blockId="ServoMotor1" block="Servo Motor #1"
+        J2 = 0,
+        //% blockId="ServoMotor2" block="Servo Motor #2"
+        J3,
+        //% blockId="ServoMotor3" block="Servo Motor #3"
+        J4
+    }
+
+    //% blockId="positionServoMotor" block="position #%no| at %angle degrees."
+    //% color="#cc0000"
+    //% angle.min=-90 angle.max=90 angle.default=0
+    //% no.default=ServoMotorId.J4
+    export function positionServoMotor(
+        no: ServoMotorId = ServoMotorId.J4,
+        angle: number = 0
+    ) {
+        if (!_initialized) initPCA9685();
+
+        let motor = 0;
+        switch (no) {
+            case ServoMotorId.J2:
+                motor = SERVO_MOTOR_1_CHANNEL;
+                break;
+            case ServoMotorId.J3:
+                motor = SERVO_MOTOR_2_CHANNEL;
+                break;
+            case ServoMotorId.J4:
+                motor = SERVO_MOTOR_3_CHANNEL;
+                break;
+        }
+        let opAngle: number = Math.abs(angle);
+        let opTravel: number = Math.round(
+            (opAngle / SERVO_MOTOR_MAX_DEGREE) *
+                SERVO_MOTOR_ZERO_TO_NINRTY_DIRATION
+        );
+        let opPosition: number =
+            SERVO_MOTOR_ZERO_POSITION_DURATION + angle >= 0
+                ? opTravel
+                : -opTravel;
+        let buffs = pins.createBuffer(5);
+        buffs[0] = PCA9685_BASE_ADDR + LED_SUB_ADDR_OFFSET * 5;
+        buffs[1] = 0;
+        buffs[2] = 0;
+        buffs[3] = opPosition & 0xff;
+        buffs[4] = (opPosition >> 8) & 0x0f;
+        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 }
