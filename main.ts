@@ -46,9 +46,11 @@ namespace DadsToolBox {
     const SERVO_MOTOR_1_CHANNEL = 3;
     const SERVO_MOTOR_2_CHANNEL = 4;
     const SERVO_MOTOR_3_CHANNEL = 5;
-    const SERVO_MOTOR_ZERO_POSITION_DURATION = 307;
-    const SERVO_MOTOR_MAX_DEGREE = 90;
-    const SERVO_MOTOR_ZERO_TO_NINRTY_DIRATION = 206;
+    const SERVO_MOTOR_ROTATION_DEGREE = 90;
+    const SERVO_MOTOR_MIN_DUTY = 600; // us
+    const SERVO_MOTOR_MAX_DUTY = 2400; // us
+    const SERVO_MOTOR_ONE_CYCLE = 20000 // us
+    const SERVO_MOTOR_DUTY_PER_DEGREE = (SERVO_MOTOR_MAX_DUTY - SERVO_MOTOR_MIN_DUTY) / (2 * SERVO_MOTOR_ROTATION_DEGREE)
 
     let _initialized = false;
     let _dir_lamp_flash = false;
@@ -464,22 +466,25 @@ namespace DadsToolBox {
                 opMotor = SERVO_MOTOR_3_CHANNEL;
                 break;
         }
-        let opAngle: number = Math.abs(angle);
-        let opTravel: number = Math.round(
-            (opAngle / SERVO_MOTOR_MAX_DEGREE) *
-            SERVO_MOTOR_ZERO_TO_NINRTY_DIRATION
-        );
-        let opPosition: number =
-            SERVO_MOTOR_ZERO_POSITION_DURATION + (angle >= 0
-                ? opTravel
-                : -opTravel);
-        console.log(opPosition.toString());
+
+        let opAngle: number = angle + SERVO_MOTOR_ROTATION_DEGREE;
+        let opDuty: number = opAngle * SERVO_MOTOR_DUTY_PER_DEGREE + SERVO_MOTOR_MIN_DUTY;
+        let opTravel: number = opDuty / SERVO_MOTOR_ONE_CYCLE * PWM_STEP_MAX;
+        
         let buffs = pins.createBuffer(5);
         buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * opMotor;
         buffs[1] = 0;
         buffs[2] = 0;
-        buffs[3] = opPosition & 0xff;
-        buffs[4] = (opPosition >> 8) & 0x0f;
+        buffs[3] = 0;
+        buffs[4] = 0;
+        pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
+
+        control.waitMicros(15);
+        buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * opMotor;
+        buffs[1] = 0;
+        buffs[2] = 0;
+        buffs[3] = opTravel & 0xff;
+        buffs[4] = (opTravel >> 8) & 0x0f;
         pins.i2cWriteBuffer(PCA9685_BASE_ADDR, buffs);
     }
 }
