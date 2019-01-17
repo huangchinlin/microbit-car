@@ -279,7 +279,7 @@ namespace DadsToolBox {
         buffs[0] =
             LED_0_SUB_ADDR +
             LED_SUB_ADDR_OFFSET *
-            (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
+                (channel == -1 ? LAMP_RIGHT_CHANNEL : channel);
         buffs[1] = 0;
         buffs[2] = 0;
         buffs[3] = channel == -1 ? 0xff : lByte;
@@ -448,10 +448,7 @@ namespace DadsToolBox {
     //% blockId="positionServoMotor" block="position %motor| at %angle degrees."
     //% color="#cc0000"
     //% angle.min=-90 angle.max=90 angle.default=0
-    export function positionServoMotor(
-        motor: ServoMotorId,
-        angle: number
-    ) {
+    export function positionServoMotor(motor: ServoMotorId, angle: number) {
         if (!_initialized) initPCA9685();
 
         let opMotor = 0;
@@ -470,7 +467,7 @@ namespace DadsToolBox {
         let opAngle: number = angle + SERVO_MOTOR_ROTATION_DEGREE;
         let opDuty: number = opAngle * SERVO_MOTOR_DUTY_PER_DEGREE + SERVO_MOTOR_MIN_DUTY;
         let opTravel: number = opDuty / SERVO_MOTOR_ONE_CYCLE * PWM_STEP_MAX;
-        
+
         let buffs = pins.createBuffer(5);
         buffs[0] = LED_0_SUB_ADDR + LED_SUB_ADDR_OFFSET * opMotor;
         buffs[1] = 0;
